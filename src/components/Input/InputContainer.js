@@ -8,6 +8,11 @@ const useStyle = makeStyles((theme) => ({
     width: "100%",
     marginTop: theme.spacing(1),
   },
+  text: {
+    MozUserSelect: "none",
+    WebkitUserSelect: "none",
+    msUserSelect: "none",
+  },
   addCard: {
     padding: theme.spacing(1, 1, 1, 2),
     margin: theme.spacing(0, 1, 1, 1),
@@ -33,7 +38,7 @@ export default function InputContainer({ listId, type }) {
           elevation={0}
           onClick={() => setOpen(!open)}
         >
-          <Typography>
+          <Typography className={classes.text}>
             {type === "card" ? "+ Add a Subtak" : "+ Add a new Task"}
           </Typography>
         </Paper>
