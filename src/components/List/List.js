@@ -33,7 +33,12 @@ export default function List({ list, index }) {
                   className={classes.cardContainer}
                 >
                   {list.cards.map((card, index) => (
-                    <Card key={card.id} card={card} index={index} />
+                    <Card
+                      key={card.id}
+                      card={card}
+                      index={index}
+                      listId={list.id}
+                    />
                   ))}
                   {provided.placeholder}
                 </div>

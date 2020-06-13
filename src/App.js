@@ -82,6 +82,23 @@ export default function App() {
     setData(newState);
   };
 
+  const updateCardTitle = (title, listId, cardId) => {
+    const list = data.lists[listId];
+    const cards = list.cards;
+    const card = cards.filter((c) => c.id == cardId);
+
+    card.title = title;
+
+    const newState = {
+      ...data,
+      lists: {
+        ...data.lists,
+        [listId]: list,
+      },
+    };
+    setData(newState);
+    console.log(data);
+  };
   const onDragEnd = (result) => {
     const { destination, source, draggableId, type } = result;
     console.log("destination", destination, "source", source, draggableId);
@@ -130,7 +147,9 @@ export default function App() {
   };
 
   return (
-    <StoreApi.Provider value={{ addMoreCard, addMoreList, updateListTitle }}>
+    <StoreApi.Provider
+      value={{ addMoreCard, addMoreList, updateListTitle, updateCardTitle }}
+    >
       <div
         className={classes.root}
         style={{
