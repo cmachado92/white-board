@@ -11,6 +11,9 @@ const useStyle = makeStyles((theme) => ({
     margin: theme.spacing(1),
     position: "relative",
   },
+  updateCardField: {
+    background: "#FFF3E0",
+  },
   text: {
     width: "90%",
   },
@@ -45,13 +48,16 @@ const Card = ({ card, index, listId }) => {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          <Paper className={classes.card}>
-            <div>
-              {open ? (
+          {open ? (
+            <Paper className={classes.updateCardField}>
+              <div>
                 <div>
                   <InputBase
+                    className={(classes.updateCardField, classes.card)}
                     onChange={handleOnChange}
                     autoFocus
+                    fullWidth
+                    multiline
                     value={newTitle}
                     inputProps={{
                       className: classes.input,
@@ -60,22 +66,25 @@ const Card = ({ card, index, listId }) => {
                     onBlur={handleOnBlur}
                   />
                 </div>
-              ) : (
-                <div className={classes.editableTitleContainer}>
+              </div>
+            </Paper>
+          ) : (
+            <Paper className={classes.card}>
+              <div>
+                <div>
                   <Typography
                     onClick={() => setOpen(!open)}
                     className={classes.editableTitle}
                   >
                     <p className={classes.text}>{card.title}</p>
                   </Typography>
+                  <IconButton className={classes.removeCard}>
+                    <ClearIcon />
+                  </IconButton>
                 </div>
-              )}
-            </div>
-
-            <IconButton className={classes.removeCard}>
-              <ClearIcon />
-            </IconButton>
-          </Paper>
+              </div>
+            </Paper>
+          )}
         </div>
       )}
     </Draggable>

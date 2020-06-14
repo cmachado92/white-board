@@ -17,7 +17,7 @@ const useStyle = makeStyles((theme) => ({
     padding: theme.spacing(1, 1, 1, 2),
     margin: theme.spacing(0, 1, 1, 1),
     width: "96%",
-    background: "#EBECF0",
+    background: "#fff",
     "&:hover": {
       backgroundColor: fade("#64B5F6", 0.25),
     },

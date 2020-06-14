@@ -85,19 +85,9 @@ export default function App() {
   const updateCardTitle = (title, listId, cardId) => {
     const list = data.lists[listId];
     const cards = list.cards;
-    const card = cards.filter((c) => c.id == cardId);
+    const card = cards.find((c) => c.id == cardId);
 
     card.title = title;
-
-    const newState = {
-      ...data,
-      lists: {
-        ...data.lists,
-        [listId]: list,
-      },
-    };
-    setData(newState);
-    console.log(data);
   };
   const onDragEnd = (result) => {
     const { destination, source, draggableId, type } = result;
