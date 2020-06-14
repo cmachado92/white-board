@@ -55,6 +55,7 @@ export default function InputCard({ setOpen, listId, type }) {
         <div>
           <Paper className={classes.card}>
             <InputBase
+              autoFocus
               onChange={handleOnChange}
               multiline
               fullWidth

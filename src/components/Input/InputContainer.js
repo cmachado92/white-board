@@ -17,7 +17,7 @@ const useStyle = makeStyles((theme) => ({
     padding: theme.spacing(1, 1, 1, 2),
     margin: theme.spacing(0, 1, 1, 1),
     width: "96%",
-    background: "#fff",
+    background: "#EBECF0",
     "&:hover": {
       backgroundColor: fade("#64B5F6", 0.25),
     },
@@ -30,7 +30,7 @@ export default function InputContainer({ listId, type }) {
   return (
     <div className={classes.root}>
       <Collapse in={open}>
-        <InputCard setOpen={setOpen} listId={listId} type={type} />
+        <InputCard autoFocus setOpen={setOpen} listId={listId} type={type} />
       </Collapse>
       <Collapse in={!open}>
         <Paper
