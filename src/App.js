@@ -89,6 +89,10 @@ export default function App() {
 
     card.title = title;
   };
+  const onDragStart = (result) => {
+    const { source, draggableId, type } = result;
+    console.log("source", source, draggableId);
+  };
   const onDragEnd = (result) => {
     const { destination, source, draggableId, type } = result;
     console.log("destination", destination, "source", source, draggableId);
@@ -150,7 +154,7 @@ export default function App() {
       >
         <TopBar setOpen={setOpen} />
 
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
           <Droppable droppableId="app" type="list" direction="horizontal">
             {(provided) => (
               <div
