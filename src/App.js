@@ -3,9 +3,16 @@ import { v4 as uuid } from "uuid";
 import List from "./components/List/List";
 import store from "./utils/store";
 import StoreApi from "./utils/storeApi";
+import { Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import InputContainer from "./components/Input/InputContainer";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, fade } from "@material-ui/core/styles";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import TopBar from "./components/TopBar";
 import SideMenu from "./components/SideMenu";
 
@@ -18,6 +25,15 @@ const useStyle = makeStyles((theme) => ({
     width: "100%",
     overflowY: "auto",
   },
+  removeCard: {
+    bottom: "25px",
+    width: "100%",
+    position: "absolute",
+    color: "#7D5252",
+    "&:hover": {
+      background: fade("#EE6B6B", 0.65),
+    },
+  },
   listContainer: {
     display: "flex",
   },
@@ -26,6 +42,10 @@ const useStyle = makeStyles((theme) => ({
 export default function App() {
   const [data, setData] = useState(store);
   const [open, setOpen] = useState(false);
+  //delete props
+  const [del, setDel] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showDelDialog, setShowDelDialog] = useState(false);
 
   const [backgroundUrl, setBackgroundUrl] = useState("");
   const classes = useStyle();
@@ -91,11 +111,36 @@ export default function App() {
   };
   const onDragStart = (result) => {
     const { source, draggableId, type } = result;
-    console.log("source", source, draggableId);
+    setShowDelete(true);
+  };
+  const remove = () => {
+    setDel(true);
   };
   const onDragEnd = (result) => {
     const { destination, source, draggableId, type } = result;
+    //if dropped on delete button
+    if (del) {
+      //reset the delete flag and show delete button flag
+      setDel(false);
+      setShowDelete(false);
+      //----Delete Logic
+      //is a task?
+      if (type === "list") {
+        const newListIds = data.listIds;
+        newListIds.splice(source.index, 1);
+
+        return;
+      }
+      //is a subtask?
+      const sourceList = data.lists[source.droppableId];
+      const draggingCard = sourceList.cards.filter(
+        (card) => card.id === draggableId
+      )[0];
+      sourceList.cards.splice(source.index, 1);
+    }
+
     console.log("destination", destination, "source", source, draggableId);
+    console.log("reason:", destination, "source", source, draggableId);
 
     if (!destination) {
       return;
@@ -153,7 +198,6 @@ export default function App() {
         }}
       >
         <TopBar setOpen={setOpen} />
-
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
           <Droppable droppableId="app" type="list" direction="horizontal">
             {(provided) => (
@@ -172,6 +216,19 @@ export default function App() {
             )}
           </Droppable>
         </DragDropContext>
+        {showDelete ? (
+          <div>
+            <Button
+              id="deleteButton"
+              onMouseUp={remove}
+              className={classes.removeCard}
+            >
+              <DeleteIcon /> Delete
+            </Button>
+          </div>
+        ) : (
+          <div></div>
+        )}
         {/* <SideMenu
           setBackgroundUrl={setBackgroundUrl}
           open={open}
