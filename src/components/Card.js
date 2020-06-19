@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Paper, IconButton, Typography, InputBase } from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
+import { Paper, Typography, InputBase } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Draggable } from "react-beautiful-dnd";
 import storeApi from "../utils/storeApi";
@@ -78,9 +77,6 @@ const Card = ({ card, index, listId }) => {
                 >
                   <p className={classes.text}>{card.title}</p>
                 </Typography>
-                <IconButton className={classes.removeCard}>
-                  <ClearIcon />
-                </IconButton>
               </div>
             </Paper>
           )}
