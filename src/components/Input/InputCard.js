@@ -46,7 +46,15 @@ export default function InputCard({ setOpen, listId, type }) {
       setOpen(false);
     }
   };
-
+  const handleOnKeyDown = (e) => {
+    if (e.charCode == 13) {
+      if (type === "list") {
+        addMoreList(title);
+        setTitle("");
+        setOpen(false);
+      }
+    }
+  };
   return (
     <ClickOutside onClick={() => setOpen(false)}>
       <div
@@ -57,6 +65,7 @@ export default function InputCard({ setOpen, listId, type }) {
             <InputBase
               autoFocus
               onChange={handleOnChange}
+              onKeyPress={handleOnKeyDown}
               multiline
               fullWidth
               inputProps={{
