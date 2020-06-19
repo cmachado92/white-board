@@ -1,9 +1,9 @@
 [] Create buttons to add/substract and edit box for hours (do worst, real and best scenario fields instead)
-[] Ability to Update info from Cards/Subtasks
-[] Ability to delete by drag and drop
-[] Fix focus issue when adding new task or subtask, the focus should be on entire component, not text field only
-[] Ability to notify any action using material ui Snack Box
-[] Ability to delete tasks by clicking 3 dots and then selecting delete as only option
+[x] Ability to Update info from Cards/Subtasks
+[x] Ability to delete by drag and drop
+[x] Fix focus issue when adding new task or subtask, the focus should be on entire component, not text field only
+[x] Ability to notify any action using material ui Snack Box
+[N/A] Ability to delete tasks by clicking 3 dots and then selecting delete as only option
 
 -------- Completed
 
@@ -11,5 +11,3 @@
 Additional
 [] Ability to show information in Dialogs
 [] Ability to change the background
-[] Ability to inclu
-[]

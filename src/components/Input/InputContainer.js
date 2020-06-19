@@ -13,6 +13,9 @@ const useStyle = makeStyles((theme) => ({
     WebkitUserSelect: "none",
     msUserSelect: "none",
   },
+  addTaskButton: {
+    minWidth: "200px",
+  },
   addCard: {
     padding: theme.spacing(1, 1, 1, 2),
     margin: theme.spacing(0, 1, 1, 1),
@@ -38,7 +41,9 @@ export default function InputContainer({ listId, type }) {
           elevation={0}
           onClick={() => setOpen(!open)}
         >
-          <Typography className={classes.text}>
+          <Typography
+            className={type === "card" ? classes.text : classes.addTaskButton}
+          >
             {type === "card" ? "+ Add a Subtak" : "+ Add a new Task"}
           </Typography>
         </Paper>
