@@ -3,8 +3,9 @@ import { v4 as uuid } from "uuid";
 import List from "./components/List/List";
 import store from "./utils/store";
 import StoreApi from "./utils/storeApi";
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import CloseIcon from "@material-ui/icons/Close";
 import InputContainer from "./components/Input/InputContainer";
 import { makeStyles, fade, useTheme } from "@material-ui/core/styles";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -15,6 +16,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TopBar from "./components/TopBar";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Snackbar from "@material-ui/core/Snackbar";
 import SideMenu from "./components/SideMenu";
 
 const useStyle = makeStyles((theme) => ({
@@ -49,7 +51,10 @@ export default function App() {
   const [itemToDelete, setItemToDelete] = useState();
   const [typeToDelete, setTypeToDelete] = useState();
   const [idToDelete, setIdToDelete] = useState();
-  const [typeDisplayText, setTypeDisplayText] = useState();
+  const [deleteDialogDisplayText, setDeleteDialogDisplayText] = useState();
+  const [notificationDisplayText, setNotificationDisplayText] = useState();
+  //action control
+  const [openNotification, setOpenNotification] = useState(false);
   //     confirmation Dialog
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -75,6 +80,10 @@ export default function App() {
         [listId]: list,
       },
     };
+    //show notification
+    setNotificationDisplayText("Subtask Added");
+    setShowDelDialog(false);
+    setOpenNotification(true);
     setData(newState);
   };
 
@@ -92,6 +101,10 @@ export default function App() {
         [newListId]: newList,
       },
     };
+    //show notification
+    setNotificationDisplayText("Task Added");
+    setShowDelDialog(false);
+    setOpenNotification(true);
     setData(newState);
   };
 
@@ -117,13 +130,28 @@ export default function App() {
     card.title = title;
   };
   const onDragStart = (result) => {
+    const { source, draggableId, type } = result;
+    // grab all data to delete if user confirms
+    setItemToDelete(source);
+    setTypeToDelete(type);
+    setIdToDelete(draggableId);
+
+    if (type === "list")
+      setDeleteDialogDisplayText("Do you want to delete this Task");
+    else setDeleteDialogDisplayText("Do you want to delete this Subtask");
+
     setShowDeleteButton(true);
   };
   const deleteElement = () => {
     //if dropped on delete button
     //----Delete Logic
     //is a task?
+
     if (typeToDelete === "list") {
+      //show notification
+      setNotificationDisplayText("Task deleted");
+      setShowDelDialog(false);
+      setOpenNotification(true);
       const newListIds = data.listIds;
       newListIds.splice(itemToDelete.index, 1);
       const newState = {
@@ -150,7 +178,19 @@ export default function App() {
         [sourceList.id]: sourceList,
       },
     };
+    //show notification
+    setNotificationDisplayText("Subtask deleted");
+    setShowDelDialog(false);
+    setOpenNotification(true);
     setData(newState);
+  };
+
+  const openNotificationHandler = () => {
+    setOpenNotification(true);
+  };
+
+  const closeNotificationHandler = () => {
+    setOpenNotification(false);
   };
   const showDialog = () => {
     setShowDelDialog(true);
@@ -161,10 +201,6 @@ export default function App() {
   const onDragEnd = (result) => {
     setShowDeleteButton(false);
     const { destination, source, draggableId, type } = result;
-    // grab all data to delete if user confirms
-    setItemToDelete(source);
-    setTypeToDelete(type);
-    setIdToDelete(draggableId);
 
     console.log("destination", destination, "source", source, draggableId);
 
@@ -256,11 +292,7 @@ export default function App() {
         ) : (
           <div></div>
         )}
-        {/* <SideMenu
-          setBackgroundUrl={setBackgroundUrl}
-          open={open}
-          setOpen={setOpen}
-        /> */}
+
         <Dialog
           fullScreen={fullScreen}
           open={showDelDialog}
@@ -271,24 +303,40 @@ export default function App() {
             {"Delete Item"}
           </DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              Are you sure you want to delete this item.
-            </DialogContentText>
+            <DialogContentText>{deleteDialogDisplayText}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button autoFocus onClick={hideDialog} color="primary">
               Cancel
             </Button>
-            <Button
-              onClick={hideDialog}
-              onMouseUp={deleteElement}
-              color="primary"
-              autoFocus
-            >
+            <Button onClick={deleteElement} color="primary" autoFocus>
               Delete
             </Button>
           </DialogActions>
         </Dialog>
+
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={openNotification}
+          autoHideDuration={3000}
+          onClose={closeNotificationHandler}
+          message={notificationDisplayText}
+          action={
+            <React.Fragment>
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={closeNotificationHandler}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+        />
       </div>
     </StoreApi.Provider>
   );
