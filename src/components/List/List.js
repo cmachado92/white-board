@@ -22,7 +22,15 @@ export default function List({ list, index }) {
     <Draggable draggableId={list.id} index={index}>
       {(provided) => (
         <div {...provided.draggableProps} ref={provided.innerRef}>
-          <Paper className={classes.root} {...provided.dragHandleProps}>
+          <Paper
+            className={classes.root}
+            {...provided.dragHandleProps}
+            style={
+              list.color != ""
+                ? { backgroundColor: list.color }
+                : { backgroundColor: "#EBECF0" }
+            }
+          >
             <CssBaseline />
             <Title title={list.title} listId={list.id} />
             <Droppable droppableId={list.id}>

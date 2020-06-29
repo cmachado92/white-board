@@ -121,8 +121,22 @@ export default function App() {
     };
     setData(newState);
   };
+  const updateListColor = (color, listId) => {
+    const list = data.lists[listId];
+    list.color = color;
+
+    const newState = {
+      ...data,
+      lists: {
+        ...data.lists,
+        [listId]: list,
+      },
+    };
+    setData(newState);
+  };
 
   const updateCardTitle = (title, listId, cardId) => {
+    console.log(data);
     const list = data.lists[listId];
     const cards = list.cards;
     const card = cards.find((c) => c.id == cardId);
@@ -249,7 +263,13 @@ export default function App() {
 
   return (
     <StoreApi.Provider
-      value={{ addMoreCard, addMoreList, updateListTitle, updateCardTitle }}
+      value={{
+        addMoreCard,
+        addMoreList,
+        updateListTitle,
+        updateCardTitle,
+        updateListColor,
+      }}
     >
       <div
         className={classes.root}

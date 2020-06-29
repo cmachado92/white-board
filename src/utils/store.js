@@ -19,6 +19,7 @@ const data = {
       id: "list-1",
       title: "Estimate",
       cards,
+      color: "",
     },
     "list-2": {
       id: "list-2",
@@ -29,11 +30,13 @@ const data = {
           title: "Sync to Quickbooks",
         },
       ],
+      color: "",
     },
     "list-3": {
       id: "list-3",
       title: "Completed",
       cards: [],
+      color: "",
     },
   },
   listIds: ["list-1", "list-2", "list-3"],

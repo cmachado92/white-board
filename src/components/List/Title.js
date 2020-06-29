@@ -1,11 +1,13 @@
 import React, { useState, useContext } from "react";
 import { Typography, InputBase, Paper, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import ColorLens from "@material-ui/icons/ColorLens";
 import storeApi from "../../utils/storeApi";
 import ClickOutside from "../../utils/ClickOutside";
 import Snackbar from "@material-ui/core/Snackbar";
 import CloseIcon from "@material-ui/icons/Close";
+import Popover from "@material-ui/core/Popover";
+import ColorPicker from "../../utils/ColorPicker";
 
 const useStyle = makeStyles((theme) => ({
   editableTitleContainer: {
@@ -33,8 +35,12 @@ export default function Title({ title, listId }) {
   const [open, setOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const { updateListTitle } = useContext(storeApi);
+  const { updateListColor } = useContext(storeApi);
   const [isTitleUpdated, setIsTitleUpdated] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+
+  const [colorDialogElement, setColorDialogElement] = useState(null);
+  const [color, setColor] = useState();
 
   const classes = useStyle();
   const handleOnChange = (e) => {
@@ -51,6 +57,15 @@ export default function Title({ title, listId }) {
     setOpen(false);
   };
 
+  const handleColorDialogClick = (e) => {
+    setColorDialogElement(e.currentTarget);
+  };
+  const handleColorDialogClose = () => {
+    console.log("Color Final:" + color);
+    setColorDialogElement(null);
+    updateListColor(color, listId);
+  };
+
   const handleShowNotification = () => {
     if (isTitleUpdated) setShowNotification(true);
   };
@@ -58,7 +73,7 @@ export default function Title({ title, listId }) {
     setShowNotification(false);
   };
   const handleOnKeyDown = (e) => {
-    if (e.charCode == 13) {
+    if (e.charCode === 13) {
       if (isTitleUpdated) {
         handleShowNotification();
         updateListTitle(newTitle, listId);
@@ -67,6 +82,10 @@ export default function Title({ title, listId }) {
       setOpen(false);
     }
   };
+
+  const openDialog = Boolean(colorDialogElement);
+  const id = open ? "simple-popover" : undefined;
+
   return (
     <div>
       {open ? (
@@ -100,9 +119,14 @@ export default function Title({ title, listId }) {
           >
             {title}
           </Typography>
-          <MoreHorizIcon />
+          <IconButton aria-describedby={id} onClick={handleColorDialogClick}>
+            <ColorLens />
+          </IconButton>
         </div>
       )}
+      {
+        //---------NOTIFICATIONS----------}
+      }
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
@@ -125,6 +149,25 @@ export default function Title({ title, listId }) {
           </React.Fragment>
         }
       />
+      {
+        //------COLOR PICKER-------------
+      }
+      <Popover
+        id={id}
+        open={openDialog}
+        anchorEl={colorDialogElement}
+        onClose={handleColorDialogClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <ColorPicker color={color} setColor={setColor}></ColorPicker>
+      </Popover>
     </div>
   );
 }
