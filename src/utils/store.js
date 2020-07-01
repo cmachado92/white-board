@@ -38,6 +38,12 @@ const data = {
       cards: [],
       color: "",
     },
+    "list-4": {
+      id: "list-3",
+      title: "Completed",
+      cards: [],
+      color: "",
+    },
   },
   listIds: ["list-1", "list-2", "list-3"],
 };
